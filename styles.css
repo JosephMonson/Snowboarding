@@ -1,31 +1,28 @@
-/* General Page Styles */
 body {
-  background-color: #e0f7fa; /* Custom background */
-  font-family: 'Arial', sans-serif; /* Font family */
-  color: #333; /* Font color */
+  background-color: cornflowerblue;
+  font-family: Helvetica, sans-serif;
+  color: white;
   margin: 0;
   padding: 0;
 }
 
-/* Header Block */
-.header {
+.intro {
+  background-color: rgba(255, 255, 255, 0.15);
   padding: 20px;
-  background-color: #004d40;
-  color: white;
-  text-align: center;
+  border-radius: 10px;
+  margin: 20px;
 }
 
-/* Content Block */
-.content {
-  padding: 20px;
-  margin: 10px;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-}
-
-/* Footer Block */
-.footer {
+.features {
+  background-color: rgba(255, 255, 255, 0.1);
   padding: 15px;
-  background-color: #c8e6c9;
-  text-align: center;
+  margin: 20px;
+  border-radius: 10px;
+}
+
+.media {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  margin: 20px;
+  border-radius: 10px;
 }
