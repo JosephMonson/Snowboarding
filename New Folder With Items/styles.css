@@ -1,0 +1,31 @@
+/* General Page Styles */
+body {
+  background-color: #e0f7fa; /* Custom background */
+  font-family: 'Arial', sans-serif; /* Font family */
+  color: #333; /* Font color */
+  margin: 0;
+  padding: 0;
+}
+
+/* Header Block */
+.header {
+  padding: 20px;
+  background-color: #004d40;
+  color: white;
+  text-align: center;
+}
+
+/* Content Block */
+.content {
+  padding: 20px;
+  margin: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+}
+
+/* Footer Block */
+.footer {
+  padding: 15px;
+  background-color: #c8e6c9;
+  text-align: center;
+}
