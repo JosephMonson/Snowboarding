@@ -1,28 +1,32 @@
+/* General Page Styles */
 body {
   background-color: cornflowerblue;
-  font-family: Helvetica, sans-serif;
   color: white;
-  margin: 0;
+  font-family: Helvetica;
+  margin: 20px;
   padding: 0;
 }
 
+/* Div: Intro Section */
 .intro {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.1);
   padding: 20px;
   border-radius: 10px;
-  margin: 20px;
+  margin-bottom: 20px;
 }
 
+/* Div: Features Section */
 .features {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  margin: 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 20px;
   border-radius: 10px;
+  margin-bottom: 20px;
 }
 
+/* Div: Media/Footer Section */
 .media {
   background-color: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  margin: 20px;
+  padding: 10px;
   border-radius: 10px;
+  text-align: center;
 }
