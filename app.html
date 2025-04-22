@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Tic Tac Toe vs Computer</title>
+  <title>Tic Tac Toe vs Snarky AI</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background-color: #f0f0f0;
+      background-color: red;
       margin: 40px;
+      color: white;
     }
 
     h1 {
-      color: #333;
+      color: #fff;
     }
 
     #board {
@@ -30,6 +31,7 @@
       background-color: white;
       border: 2px solid #333;
       font-size: 2em;
+      color: black;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -38,17 +40,31 @@
 
     .cell.disabled {
       pointer-events: none;
-      background-color: #e0e0e0;
+      background-color: #ddd;
     }
 
     #status {
       margin-top: 20px;
       font-weight: bold;
-      color: #333;
+      font-size: 1.2em;
+    }
+
+    #snark {
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    #emoji {
+      font-size: 2em;
+      margin-top: 10px;
+    }
+
+    #scoreboard {
+      margin-top: 20px;
     }
 
     button {
-      margin-top: 20px;
+      margin: 10px 5px;
       padding: 10px 20px;
       font-size: 1em;
       cursor: pointer;
@@ -57,16 +73,44 @@
 </head>
 <body>
 
-  <h1>Tic Tac Toe vs Computer</h1>
+  <h1>Tic Tac Toe vs Snarky AI</h1>
+  <div id="scoreboard">Player Wins: <span id="playerScore">0</span> | AI Wins: <span id="aiScore">0</span></div>
   <div id="board"></div>
   <div id="status">Your move!</div>
+  <div id="snark"></div>
+  <div id="emoji"></div>
   <button onclick="resetGame()">Restart</button>
+  <button onclick="rageQuit()">Rage Quit</button>
 
   <script>
     const boardEl = document.getElementById("board");
     const statusEl = document.getElementById("status");
+    const snarkEl = document.getElementById("snark");
+    const emojiEl = document.getElementById("emoji");
+    const playerScoreEl = document.getElementById("playerScore");
+    const aiScoreEl = document.getElementById("aiScore");
+
     let board = ["", "", "", "", "", "", "", "", ""];
     let gameOver = false;
+    let playerScore = 0;
+    let aiScore = 0;
+
+    const snarkyMessages = [
+      "Is that the best you’ve got?",
+      "You call that a strategy?",
+      "I saw that move coming from a mile away.",
+      "Just give up already.",
+      "I should charge rent for this board space.",
+      "You're making this too easy.",
+      "Your moves are adorable.",
+      "Did your cat help you pick that spot?"
+    ];
+
+    const emojis = {
+      win: "😎",
+      lose: "🤖",
+      draw: "😐"
+    };
 
     function createBoard() {
       boardEl.innerHTML = "";
@@ -86,15 +130,73 @@
       if (board[idx] !== "" || gameOver) return;
       board[idx] = "X";
       updateGame();
-      if (!gameOver) setTimeout(computerMove, 400);
+      if (!gameOver) setTimeout(computerMove, 500);
     }
 
     function computerMove() {
-      const empty = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
-      if (empty.length === 0) return;
-      const randIdx = empty[Math.floor(Math.random() * empty.length)];
-      board[randIdx] = "O";
+      let bestMove;
+      if (Math.random() < 0.8) {
+        bestMove = getBestMove();
+      } else {
+        const available = board
+          .map((val, idx) => (val === "" ? idx : null))
+          .filter(v => v !== null);
+        bestMove = available[Math.floor(Math.random() * available.length)];
+      }
+      board[bestMove] = "O";
       updateGame();
+      if (!gameOver) {
+        const snark = snarkyMessages[Math.floor(Math.random() * snarkyMessages.length)];
+        snarkEl.textContent = snark;
+      }
+    }
+
+    function getBestMove() {
+      let bestScore = -Infinity;
+      let move;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === "") {
+          board[i] = "O";
+          let score = minimax(board, 0, false);
+          board[i] = "";
+          if (score > bestScore) {
+            bestScore = score;
+            move = i;
+          }
+        }
+      }
+      return move;
+    }
+
+    function minimax(newBoard, depth, isMaximizing) {
+      const result = checkWinner();
+      if (result === "O") return 10 - depth;
+      if (result === "X") return depth - 10;
+      if (result === "Draw") return 0;
+
+      if (isMaximizing) {
+        let bestScore = -Infinity;
+        for (let i = 0; i < newBoard.length; i++) {
+          if (newBoard[i] === "") {
+            newBoard[i] = "O";
+            let score = minimax(newBoard, depth + 1, false);
+            newBoard[i] = "";
+            bestScore = Math.max(score, bestScore);
+          }
+        }
+        return bestScore;
+      } else {
+        let bestScore = Infinity;
+        for (let i = 0; i < newBoard.length; i++) {
+          if (newBoard[i] === "") {
+            newBoard[i] = "X";
+            let score = minimax(newBoard, depth + 1, true);
+            newBoard[i] = "";
+            bestScore = Math.min(score, bestScore);
+          }
+        }
+        return bestScore;
+      }
     }
 
     function checkWinner() {
@@ -116,7 +218,21 @@
       const winner = checkWinner();
       if (winner) {
         gameOver = true;
-        statusEl.textContent = winner === "Draw" ? "It's a draw!" : `${winner} wins!`;
+        if (winner === "X") {
+          statusEl.textContent = "You win!";
+          emojiEl.textContent = emojis.win;
+          playerScore++;
+          playerScoreEl.textContent = playerScore;
+        } else if (winner === "O") {
+          statusEl.textContent = "The AI wins!";
+          emojiEl.textContent = emojis.lose;
+          aiScore++;
+          aiScoreEl.textContent = aiScore;
+        } else {
+          statusEl.textContent = "It's a draw!";
+          emojiEl.textContent = emojis.draw;
+        }
+        snarkEl.textContent = "";
       }
     }
 
@@ -124,7 +240,14 @@
       board = ["", "", "", "", "", "", "", "", ""];
       gameOver = false;
       statusEl.textContent = "Your move!";
+      emojiEl.textContent = "";
+      snarkEl.textContent = "";
       createBoard();
+    }
+
+    function rageQuit() {
+      alert("You rage quit! AI claims moral victory. 🤖🏆");
+      resetGame();
     }
 
     createBoard();
